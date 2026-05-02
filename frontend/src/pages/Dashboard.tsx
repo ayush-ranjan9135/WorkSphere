@@ -106,7 +106,7 @@ export default function Dashboard() {
         </div>
       ) : (
         <motion.div variants={containerVariants} className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-          {stats.map((stat, i) => (
+          {stats.map((stat) => (
             <motion.div key={stat.label} variants={itemVariants}>
               <SpotlightCard className={`p-5 h-full stat-card bg-gradient-to-br ${stat.gradient} ${stat.borderColor}`}>
                 <div className="flex items-center justify-between mb-3">
