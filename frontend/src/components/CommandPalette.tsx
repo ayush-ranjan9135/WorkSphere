@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Command } from 'cmdk';
 import { Search, Folder, CheckSquare, Settings, LogOut, User, Users } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
@@ -47,7 +47,7 @@ export function CommandPalette() {
               shouldFilter={true}
               className="flex h-full w-full flex-col overflow-hidden"
               onKeyDown={(e) => {
-                if (e.key === 'Escape' || (e.key === 'Backspace' && !e.currentTarget.value)) {
+                if (e.key === 'Escape' || (e.key === 'Backspace' && !(e.currentTarget as HTMLDivElement & { value?: string }).value)) {
                   e.preventDefault();
                   setOpen(false);
                 }

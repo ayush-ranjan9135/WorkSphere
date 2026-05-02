@@ -100,7 +100,7 @@ export default function Dashboard() {
       {/* Stats */}
       {loading ? (
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-          {[...Array(4)].map((_, i) => (
+          {[...Array(4)].map((_, _i) => (
             <div key={i} className="h-32 rounded-2xl skeleton-shimmer" />
           ))}
         </div>
