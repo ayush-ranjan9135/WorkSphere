@@ -1,0 +1,95 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String        @id @default(uuid())
+  email        String        @unique
+  name         String
+  passwordHash String
+  role         Role          @default(MEMBER)
+  createdAt    DateTime      @default(now())
+  
+  projects     Project[]     @relation("ProjectOwner")
+  tasks        Task[]        @relation("TaskAssignee")
+  comments     Comment[]
+  activityLogs ActivityLog[]
+}
+
+enum Role {
+  ADMIN
+  MEMBER
+}
+
+model Team {
+  id        String    @id @default(uuid())
+  name      String
+  createdAt DateTime  @default(now())
+  projects  Project[]
+}
+
+model Project {
+  id          String   @id @default(uuid())
+  name        String
+  description String?
+  teamId      String?
+  team        Team?    @relation(fields: [teamId], references: [id])
+  ownerId     String
+  owner       User     @relation("ProjectOwner", fields: [ownerId], references: [id])
+  createdAt   DateTime @default(now())
+  tasks       Task[]
+}
+
+model Task {
+  id          String   @id @default(uuid())
+  title       String
+  description String?
+  projectId   String
+  project     Project  @relation(fields: [projectId], references: [id])
+  assigneeId  String?
+  assignee    User?    @relation("TaskAssignee", fields: [assigneeId], references: [id])
+  status      Status   @default(TODO)
+  priority    Priority @default(MEDIUM)
+  deadline    DateTime?
+  order       Float    @default(0) // For Kanban sorting
+  createdAt   DateTime @default(now())
+  
+  comments    Comment[]
+}
+
+enum Status {
+  TODO
+  IN_PROGRESS
+  DONE
+}
+
+enum Priority {
+  LOW
+  MEDIUM
+  HIGH
+}
+
+model Comment {
+  id        String   @id @default(uuid())
+  content   String
+  taskId    String
+  task      Task     @relation(fields: [taskId], references: [id])
+  authorId  String
+  author    User     @relation(fields: [authorId], references: [id])
+  createdAt DateTime @default(now())
+}
+
+model ActivityLog {
+  id         String   @id @default(uuid())
+  action     String
+  entityId   String
+  entityType String
+  userId     String
+  user       User     @relation(fields: [userId], references: [id])
+  createdAt  DateTime @default(now())
+}
