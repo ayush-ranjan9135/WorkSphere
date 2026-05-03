@@ -15,6 +15,8 @@ import teamRoutes from './routes/teams.js';
 
 const app = express();
 
+app.set('trust proxy', 1);
+
 app.use(helmet());
 const allowedOrigin = (process.env.CLIENT_URL || '').replace(/\/$/, '');
 app.use(cors({ origin: allowedOrigin, credentials: true }));
